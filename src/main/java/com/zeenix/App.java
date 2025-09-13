@@ -12,7 +12,7 @@ public class App {
   public static void main(String[] args) {
     List<MenuItem> items = new ArrayList<>();
     Menu menu = new Menu(items);
-    ClientController controller = new ClientController();
+    ClientController controller = new ClientController(menu.getScanner());
 
     items.add(new MenuItem("Cadastrar cliente", () -> controller.createClient()));
     items.add(new MenuItem("Solicitar cartão", () -> {}));
