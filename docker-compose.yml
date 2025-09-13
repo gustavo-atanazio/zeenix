@@ -21,7 +21,7 @@ services:
   app:
     build: .
     container_name: zeenix-app
-    
+
     depends_on:
       - mysql
 
@@ -35,6 +35,20 @@ services:
 
     stdin_open: true
     tty: true
+
+  flyway:
+    image: flyway/flyway:10
+
+    depends_on:
+      - mysql
+
+    command: -url=jdbc:mysql://mysql:3306/zeenix -user=zeenix_user -password=zeenix_pass -connectRetries=10 migrate
+
+    volumes:
+      - ./src/main/resources/db/migrations:/flyway/sql
+
+    networks:
+      - zeenix-network
 
 volumes:
   mysql_data:
