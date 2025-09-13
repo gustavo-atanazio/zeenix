@@ -1,0 +1,44 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: zeenix-mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: zeenix
+      MYSQL_USER: zeenix_user
+      MYSQL_PASSWORD: zeenix_pass
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    networks:
+      - zeenix-network
+
+  app:
+    build: .
+    container_name: zeenix-app
+    
+    depends_on:
+      - mysql
+
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/zeenix
+      DB_USER: zeenix_user
+      DB_PASSWORD: zeenix_pass
+
+    networks:
+      - zeenix-network
+
+    stdin_open: true
+    tty: true
+
+volumes:
+  mysql_data:
+
+networks:
+  zeenix-network:
+    driver: bridge
