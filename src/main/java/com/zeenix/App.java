@@ -6,6 +6,7 @@ import java.util.List;
 import com.zeenix.controllers.ClientController;
 import com.zeenix.views.Menu;
 import com.zeenix.views.MenuItem;
+import com.zeenix.views.MenuItemType;
 
 public class App {
   public static void main(String[] args) {
@@ -21,7 +22,7 @@ public class App {
     items.add(new MenuItem("Consultar clientes/cartões", () -> {
       controller.listClients().forEach(client -> System.out.println(client.toString()));
     }));
-    items.add(new MenuItem("Sair", () -> System.out.println("\nObrigado por usar o Zeenix!")));
+    items.add(new MenuItem("Sair", () -> System.out.println("\nObrigado por usar o Zeenix!"), MenuItemType.EXIT));
 
     menu.start();
   }

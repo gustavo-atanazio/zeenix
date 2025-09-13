@@ -5,38 +5,53 @@ import java.util.Scanner;
 
 public class Menu {
   private List<MenuItem> items;
+  private Scanner scanner;
+  private boolean running;
 
-  public Menu(List<MenuItem> items) { this.items = items; }
+  public Menu(List<MenuItem> items) {
+    this.items = items;
+    this.scanner = new Scanner(System.in);
+    this.running = true;
+  }
+
+  public Scanner getScanner() { return scanner; }
 
   public void start() {
-    Scanner scanner = new Scanner(System.in);
-
     System.out.println("Bem-vindo ao Zeenix!");
 
-    int selectedOption = -1;
-    MenuItem selectedItem = null;
-
-    while (selectedItem == null) {
-      System.out.println("\nEscolha uma ação:\n");
-
-      for (int i = 0; i < items.size(); i++) {
-        System.out.printf("%d. %s%n", i + 1, items.get(i).label());
-      }
-
-      System.out.print("\nOpção: ");
-
-      if (scanner.hasNextInt()) {
-        selectedOption = scanner.nextInt();
-
-        if (selectedOption >= 1 && selectedOption <= items.size()) selectedItem = items.get(selectedOption - 1);
-        else System.out.println("Opção inválida. Tente novamente.");
-      } else {
-        System.out.println("Digite um número válido!");
-        scanner.next();
-      }
+    while (running) {
+      displayMenu();
+      processOption();
     }
 
-    selectedItem.action().run();
     scanner.close();
+  }
+
+  private void displayMenu() {
+    System.out.println("\nEscolha uma ação:\n");
+
+    for (int i = 0; i < items.size(); i++) {
+      System.out.printf("%d. %s%n", i + 1, items.get(i).label());
+    }
+
+    System.out.print("\nOpção: ");
+  }
+
+  private void processOption() {
+    if (scanner.hasNextInt()) {
+      int selectedOption = scanner.nextInt();
+
+      if (selectedOption >= 1 && selectedOption <= items.size()) {
+        MenuItem selectedItem = items.get(selectedOption - 1);
+        selectedItem.action().run();
+        
+        if (selectedItem.type() == MenuItemType.EXIT) {
+            running = false;
+        }
+      } else System.out.println("Opção inválida. Tente novamente.");
+    } else {
+      System.out.println("Digite um número válido!");
+      scanner.next();
+    }
   }
 }
