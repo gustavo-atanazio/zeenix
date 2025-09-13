@@ -37,13 +37,13 @@ services:
     tty: true
 
   flyway:
-    image: flyway/flyway:10
+    image: flyway/flyway:11.12
 
     depends_on:
       - mysql
 
-    command: -url=jdbc:mysql://mysql:3306/zeenix -user=zeenix_user -password=zeenix_pass -connectRetries=10 migrate
-
+    command: -url=jdbc:mysql://mysql:3306/zeenix?allowPublicKeyRetrieval=true -user=zeenix_user -password=zeenix_pass migrate
+      
     volumes:
       - ./src/main/resources/db/migrations:/flyway/sql
 
